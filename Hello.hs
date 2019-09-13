@@ -40,5 +40,5 @@ integration f a b = let
     step = (b - a) / steps 
     steps = 1000
     iter f a b acc n| n == 0 = acc * step / 2 
-                     | otherwise = iter f b (b + step) ((f a + f b)  + acc) (n - 1)
+                    | otherwise = iter f b (b + step) ((f a + f b)  + acc) (n - 1)
     in iter f a (a + step) 0 steps
