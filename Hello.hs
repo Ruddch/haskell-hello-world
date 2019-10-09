@@ -1,4 +1,6 @@
 module Pam where
+
+import Data.Function
 sumSquares x y = x ^ 2 + y ^ 2
 main = putStrLn "Hello World!"
 
@@ -42,3 +44,16 @@ integration f a b = let
     iter f a b acc n| n == 0 = acc * step / 2 
                     | otherwise = iter f b (b + step) ((f a + f b)  + acc) (n - 1)
     in iter f a (a + step) 0 steps
+
+getSecondFrom :: a -> b -> c -> b
+getSecondFrom first second third = second
+
+multSecond = g `on` h
+
+g = (*)
+
+h = snd
+
+
+on3 :: (b -> b -> b -> c) -> (a -> b) -> a -> a -> a -> c
+on3 op f x y z = op (f x) (f y) (f z)
