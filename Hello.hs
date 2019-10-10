@@ -57,3 +57,25 @@ h = snd
 
 on3 :: (b -> b -> b -> c) -> (a -> b) -> a -> a -> a -> c
 on3 op f x y z = op (f x) (f y) (f z)
+
+
+doItYourself = f1 . g1 . h1
+
+f1 = logBase 2
+
+g1 = flip (^) 3
+
+h1 = max 42
+
+class Printable a where
+    toString :: a -> String
+    
+instance Printable Bool where
+    toString True = "True"
+    toString False = "False"
+
+instance Printable () where
+	toString a = "unit type"
+
+instance (Printable a, Printable b) => Printable (a,b) where
+	toString (a,b) =  "(" ++ (toString a) ++ "," ++ (toString b) ++ ")"
