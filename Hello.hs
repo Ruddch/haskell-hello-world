@@ -79,3 +79,32 @@ instance Printable () where
 
 instance (Printable a, Printable b) => Printable (a,b) where
 	toString (a,b) =  "(" ++ (toString a) ++ "," ++ (toString b) ++ ")"
+
+
+class KnownToGork a where
+    stomp :: a -> a
+    doesEnrageGork :: a -> Bool
+
+class KnownToMork a where
+    stab :: a -> a
+    doesEnrageMork :: a -> Bool
+
+class (KnownToGork a, KnownToMork a) => KnownToGorkAndMork a where
+    stompOrStab :: a -> a
+    stompOrStab a | (and) [doesEnrageGork a,  doesEnrageMork a] = stab $ stomp a 
+                | doesEnrageGork a = stomp a
+                | doesEnrageMork a = stab a
+                | otherwise = a
+
+class (Eq a, Bounded a, Enum a) => SafeEnum a where
+  ssucc :: a -> a
+  ssucc x | x == maxBound = minBound
+          | otherwise = succ x
+
+  spred :: a -> a
+  spred x | x == minBound = maxBound
+          | otherwise = pred x
+
+avg :: Int -> Int -> Int -> Double
+avg a b c = fromInteger (toInteger a + toInteger b + toInteger c) / 3 
+
