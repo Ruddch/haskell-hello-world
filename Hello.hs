@@ -1,6 +1,8 @@
 module Pam where
-
+ 
 import Data.Function
+import Data.Char
+
 sumSquares x y = x ^ 2 + y ^ 2
 main = putStrLn "Hello World!"
 
@@ -108,3 +110,71 @@ class (Eq a, Bounded a, Enum a) => SafeEnum a where
 avg :: Int -> Int -> Int -> Double
 avg a b c = fromInteger (toInteger a + toInteger b + toInteger c) / 3 
 
+addTwoElements :: a -> a -> [a] -> [a]
+addTwoElements x y list = x : y : list
+
+nTimes:: a -> Int -> [a]
+nTimes num count = let 
+    iter res n | n == count = res
+               | otherwise = iter (num : res) (n + 1)
+    in iter [] 0               
+
+oddsOnly :: Integral a => [a] -> [a]
+oddsOnly [] = []
+oddsOnly (x:xs) | odd x = x : oddsOnly xs
+                | otherwise = oddsOnly xs
+
+isPalindrome :: Eq a => [a] -> Bool
+isPalindrome a = reverse a == a 
+
+sum3 :: Num a => [a] -> [a] -> [a] -> [a]
+sum3 x y z = let
+    sum2 xs [] = xs
+    sum2 [] ys = ys
+    sum2 (x:xs) (y:ys) = (x + y) : sum2 xs ys
+    in sum2 x $ sum2 y z
+
+
+groupElems :: Eq a => [a] -> [[a]]
+groupElems [] = []
+groupElems (a:as) = let
+    helper (x:xs) (y:acc)
+        | x == y = helper xs (x:y:acc)
+        | otherwise = (y : acc ) : helper xs [x]
+    helper [] acc = [acc]  
+    in helper as [a]
+
+readDigits :: String -> (String, String)
+readDigits = span isDigit
+
+qsort :: Ord a => [a] -> [a]
+
+qsort [] = []
+qsort [x] = [x]
+qsort (x:xs) = (qsort f) ++ [x] ++ (qsort s) 
+    where f = filter (< x) xs
+	  s = filter (>= x) xs
+
+squares'n'cubes :: Num a => [a] -> [a]
+squares'n'cubes = concatMap (\x -> [x^2, x^3])
+
+perms :: [a] -> [[a]]
+perms [] = [[]]
+perms [x] = [[x]]
+    
+perms (x:xs) = concatMap (\list -> interleave list) (perms xs)
+        where interleave [] = [[x]]
+              interleave (y:ys) = (x:y:ys) : map (y:) (interleave ys)
+
+
+delAllUpper :: String -> String
+delAllUpper = unwords . filter (any isLower) . words
+
+max3 :: Ord a => [a] -> [a] -> [a] -> [a]
+m3 :: Ord a => a -> a -> a -> a
+m3 a b c = maximum [a,b,c]
+
+max3 = zipWith3 m3
+
+fibStream :: [Integer]
+fibStream = 0 : 1 : zipWith (+) fibStream (tail fibStream)
