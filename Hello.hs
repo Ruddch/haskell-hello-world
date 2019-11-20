@@ -91,6 +91,7 @@ class KnownToMork a where
     stab :: a -> a
     doesEnrageMork :: a -> Bool
 
+
 class (KnownToGork a, KnownToMork a) => KnownToGorkAndMork a where
     stompOrStab :: a -> a
     stompOrStab a | (and) [doesEnrageGork a,  doesEnrageMork a] = stab $ stomp a 
@@ -178,3 +179,11 @@ max3 = zipWith3 m3
 
 fibStream :: [Integer]
 fibStream = 0 : 1 : zipWith (+) fibStream (tail fibStream)
+
+change :: (Ord a, Num a) => a -> [[a]]
+change 0 = [[]]
+change sum = [ c:cs |c<-coins, c<=sum, cs<-change (sum - c) ]
+
+
+
+
