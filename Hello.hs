@@ -180,10 +180,17 @@ max3 = zipWith3 m3
 fibStream :: [Integer]
 fibStream = 0 : 1 : zipWith (+) fibStream (tail fibStream)
 
-change :: (Ord a, Num a) => a -> [[a]]
-change 0 = [[]]
-change sum = [ c:cs |c<-coins, c<=sum, cs<-change (sum - c) ]
+-- change :: (Ord a, Num a) => a -> [[a]]
+-- change 0 = [[]]
+-- change sum = [ c:cs | c<-coins, c<=sum, cs<-change (sum - c) ]
 
+evenOnly :: [a] -> [a]
+evenOnly arr = fst $ foldl (\(list, index) x -> if even index then (list ++ [x], index + 1) else (list, index + 1)) ([], 1) arr
 
+evenOnly' :: [a] -> [a]
+evenOnly' arr = fst $ foldl (\(list, index) x -> if even index then (list ++ [x], index + 1) else (list, index + 1)) ([], 1) arr
 
+revRange :: (Char,Char) -> [Char]
+revRange (start, end) = unfoldr g end
+  where g x = if x < start then Nothing else Just(x, pred x)
 
