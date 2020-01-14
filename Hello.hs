@@ -194,3 +194,29 @@ revRange :: (Char,Char) -> [Char]
 revRange (start, end) = unfoldr g end
   where g x = if x < start then Nothing else Just(x, pred x)
 
+processData :: SomeData -> String
+processData d = case doSomeWork d of 
+    (_, 0) -> "Success"
+    (_, x) -> "Fail: " ++ show x
+
+data Point = Point Double Double
+
+origin :: Point
+origin = Point 0.0 0.0
+
+distanceToOrigin :: Point -> Double
+distanceToOrigin (Point x y) = sqrt (x ^ 2 + y ^ 2)
+
+distance :: Point -> Point -> Double
+distance (Point x y) (Point x1 y1) = sqrt((x - x1) ^ 2 + (y - y1) ^ 2 )
+
+data Result' = Err Int | Succ
+
+instance Show Result' where
+    show (Err code) = "Fail: " ++ show code
+    show Succ = "Success"
+
+doSomeWork' :: SomeData -> Result'
+doSomeWork' d = let (r, code) = doSomeWork d in
+    if code == 0 then Succ else Err code
+    
