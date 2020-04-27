@@ -2,6 +2,7 @@ module Pam where
  
 import Data.Function
 import Data.Char
+import Data.List
 
 sumSquares x y = x ^ 2 + y ^ 2
 main = putStrLn "Hello World!"
@@ -220,3 +221,54 @@ doSomeWork' :: SomeData -> Result'
 doSomeWork' d = let (r, code) = doSomeWork d in
     if code == 0 then Succ else Err code
     
+
+
+data Person = Person { firstName :: String, lastName :: String, age :: Int }
+
+abbrFirstName :: Person -> Person
+abbrFirstName person@(Person fName _ _) = person {firstName = newFName}
+    where newFName = if length fName > 2 
+                     then take 1 fName ++ "." 
+                     else fName
+
+data Coord a = Coord a a
+
+distance :: Coord Double -> Coord Double -> Double
+distance (Coord x y) (Coord x1 y1) = sqrt((x1 - x)^2 + (y1 - y)^2)
+
+manhDistance :: Coord Int -> Coord Int -> Int
+manhDistance (Coord x y) (Coord x1 y1) = abs(x1 - x) + abs(y1 - y)
+
+data Bit = Zero | One | Pam deriving Show
+data Sign = Minus | Plus deriving (Eq, Show)
+data Z = Z Sign [Bit] deriving Show
+
+zToInt :: Z -> Int
+
+bitToInt :: Bit -> Int
+bitToInt Zero = 0
+bitToInt One = 1
+
+intToBit :: Int -> Bit
+intToBit 1 = One
+intToBit 0 = Zero
+intToBit _ = Pam
+
+zToInt (Z sign bits) = if sign == Plus
+                          then (fst number)
+                          else -1 * (fst number)
+    where number = foldl f (0,0) bits
+          f = (\(sum, count) bit -> (sum + (bitToInt bit)*2^count, count + 1))
+
+intToZ :: Int -> Z
+intToZ number = if number < 0
+                   then (Z Minus bits)
+                   else (Z Plus bits)
+    where bits = unfoldr (\x -> if x /= 0 then Just(intToBit(rem (abs x) 2), quot x 2) else Nothing) number
+
+add :: Z -> Z -> Z
+add a b = intToZ (zToInt a + zToInt b)
+
+mul :: Z -> Z -> Z
+mul a b = intToZ (zToInt a * zToInt b)
+
